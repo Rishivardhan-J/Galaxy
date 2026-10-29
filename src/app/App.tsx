@@ -72,7 +72,7 @@ export default function App() {
       </div>
       <ProgressLine />
       <Suspense fallback={null}>
-        <AnimatePresence>{caseStudy && <CaseStudyLayer key="cs" />}</AnimatePresence>
+        <AnimatePresence>{caseStudy && <CaseStudyLayer key="cs" cs={caseStudy} />}</AnimatePresence>
         <AnimatePresence>{overlay === 'brief' && <BriefOverlay key="brief" />}</AnimatePresence>
         <AnimatePresence>{overlay === 'palette' && <CommandPalette key="pal" />}</AnimatePresence>
         {fine && !reduced && <Cursor />}

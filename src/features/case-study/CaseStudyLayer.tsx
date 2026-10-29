@@ -8,8 +8,8 @@ import { useFocusTrap } from '../../app/useFocusTrap'
 
 const TITLES = ['Problem', 'Approach', 'Architecture', 'Outcome']
 
-export default function CaseStudyLayer() {
-  const cs = useStore((s) => s.caseStudy)!
+// `cs` arrives as a prop so the exit animation keeps the last value after the store clears it.
+export default function CaseStudyLayer({ cs }: { cs: { slug: string; page: number } }) {
   const openCase = useStore((s) => s.openCase)
   const closeCase = useStore((s) => s.closeCase)
   const reduced = useStore((s) => s.reducedMotion)

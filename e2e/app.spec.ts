@@ -71,3 +71,15 @@ test('works with WebGL disabled', async ({ page }) => {
   await page.goto('/?gl=0#star-systems'); await settle(page)
   await expect(page.locator('.css-planet').first()).toBeVisible()
 })
+
+test('Esc from a case study returns to Star Systems, not a blank page', async ({ page }) => {
+  const errors: string[] = []
+  page.on('pageerror', (e) => errors.push(e.message))
+  await page.goto('/#star-systems')
+  await page.getByRole('button', { name: /Open mission/ }).click()
+  await expect(page.getByRole('dialog')).toBeVisible()
+  await page.keyboard.press('Escape')
+  await expect(page.getByRole('dialog')).toBeHidden()
+  await expect(page.getByRole('button', { name: /Open mission/ })).toBeVisible()
+  expect(errors).toEqual([])
+})
