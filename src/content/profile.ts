@@ -27,3 +27,13 @@ export const credentials = [
   { name: 'SQL Basics', by: 'HackerRank', year: 2025 },
   { name: 'SQL Intermediate', by: 'HackerRank', year: 2025 },
 ]
+
+export const roleCycle = ['Full-stack & mobile developer', 'Flutter · React · Node.js'] as const
+
+// Launchpad credibility strip. `value` is counted up to; `suffix` is appended.
+export const launchStats = [
+  { value: 3, suffix: '', label: 'Flagship projects' },
+  { value: profile.leetcode.rating, suffix: '', label: 'LeetCode max rating' },
+  { value: 600, suffix: '+', label: 'Problems solved' },
+  { value: 2, suffix: '×', label: 'Hackathon finalist' },
+] as const

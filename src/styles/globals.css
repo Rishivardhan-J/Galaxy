@@ -91,6 +91,24 @@ h1, h2, h3, p { margin: 0; }
 .launch .cta { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; margin-top: 36px; }
 .launch .planet-wrap { display: grid; place-items: center; position: relative; }
 .hint { margin-top: 28px; }
+.launch { flex: 1; min-height: 0; height: auto; }
+.launch .tagline { margin-top: 10px; }
+.launch .planet-wrap { overflow: visible; }
+.hero-sys { position: relative; max-width: 100%; transform-style: preserve-3d; }
+.hero-orbit { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.hero-orbit ellipse { fill: none; stroke: var(--line); stroke-width: 1; }
+.hero-core { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); z-index: 2; pointer-events: none; }
+.hero-moons { position: absolute; left: 50%; top: 50%; }
+.moon { position: absolute; left: 0; top: 0; border-radius: 50%; background: none; cursor: pointer; }
+.moon:focus-visible { outline: 1px solid var(--fg); outline-offset: 6px; }
+.moon-tag { position: absolute; top: calc(100% + 8px); left: 50%; transform: translateX(-50%); white-space: nowrap; font: 11px var(--font-mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--fg); opacity: 0; transition: opacity 0.2s; pointer-events: none; }
+.moon:hover .moon-tag, .moon:focus-visible .moon-tag { opacity: 1; }
+.role-cycle { display: inline-block; animation: fadein 600ms both; }
+.stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); margin: 0 0 clamp(8px, 2vh, 24px); border-top: 1px solid var(--line); }
+.stats > div { padding: 14px 0 0 18px; border-left: 1px solid var(--line); }
+.stats > div:first-child { padding-left: 0; border-left: 0; }
+.stats dt { margin: 0; }
+.stats dd { margin: 4px 0 0; font: 500 clamp(24px, 3vw, 40px) var(--font-display); }
 
 /* Origin */
 .origin { display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); gap: clamp(24px, 5vw, 96px); align-items: center; height: 100%; }
@@ -268,6 +286,9 @@ h1, h2, h3, p { margin: 0; }
   .launch, .origin, .const, .case-body { grid-template-columns: 1fr; }
   .launch { grid-template-rows: auto 1fr; align-content: center; }
   .launch .planet-wrap { order: -1; max-height: 34vh; }
+  .moon-tag { display: none; }
+  .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .stats > div:nth-child(odd) { padding-left: 0; border-left: 0; }
   .origin > div:first-child .body { display: none; }
   .dossier { grid-template-columns: minmax(0, 1fr); }
   .const { grid-template-columns: minmax(0, 1fr); align-content: start; overflow-y: auto; gap: 12px; padding-bottom: 12px; }
@@ -298,10 +319,11 @@ h1, h2, h3, p { margin: 0; }
 @media (max-height: 640px) {
   .launch h1 { font-size: clamp(36px, 8vh, 72px); margin: 12px 0; }
   .launch .cta { margin-top: 18px; }
-  .hint { display: none; }
+  .hint, .stats { display: none; }
 }
 @media (hover: none), (pointer: coarse) { .cursor { display: none; } }
 @media (prefers-reduced-motion: reduce) {
+  .role-cycle { animation: none; }
   .ripples i { animation: none; opacity: 0.5; transform: scale(var(--s, 0.6)); }
   .split > span, .sel-ring circle, .diagram .edge, .diagram .node, .boot div { animation: none !important; opacity: 1; stroke-dashoffset: 0; transform: none; }
   .pulse { animation: none; }
