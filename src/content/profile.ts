@@ -21,11 +21,11 @@ export const timeline = [
 ]
 
 export const credentials = [
-  { name: 'Intro to C programming', by: 'IIT Bombay', year: 2024 },
-  { name: 'Intro to C++ programming', by: 'IIT Bombay', year: 2024 },
-  { name: 'Mastering DSA in C and C++', by: 'Udemy', year: 2025 },
-  { name: 'SQL Basics', by: 'HackerRank', year: 2025 },
-  { name: 'SQL Intermediate', by: 'HackerRank', year: 2025 },
+  { name: 'Intro to C programming', by: 'IIT Bombay', mark: 'IITB', year: 2024 },
+  { name: 'Intro to C++ programming', by: 'IIT Bombay', mark: 'IITB', year: 2024 },
+  { name: 'Mastering DSA in C and C++', by: 'Udemy', mark: 'UD', year: 2025 },
+  { name: 'SQL Basics', by: 'HackerRank', mark: 'HR', year: 2025 },
+  { name: 'SQL Intermediate', by: 'HackerRank', mark: 'HR', year: 2025 },
 ]
 
 export const roleCycle = ['Full-stack & mobile developer', 'Flutter · React · Node.js'] as const
