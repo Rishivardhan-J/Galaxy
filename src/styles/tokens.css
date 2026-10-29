@@ -1,0 +1,29 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-bg: #000000;
+  --color-fg: #ffffff;
+  --color-muted: #a3a3a3;
+  --color-line: #333333;
+  --color-line-soft: #262626;
+  --color-map-line: #4d4d4d;
+  --color-chip-border: #666666;
+  --color-star-dim: #8a8a8a;
+  --font-display: 'Space Grotesk', system-ui, sans-serif;
+  --font-body: 'Inter', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+  --ease-warp: cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+:root {
+  --bg: #000000;
+  --fg: #ffffff;
+  --muted: #a3a3a3;
+  --line: #333333;
+  --line-soft: #262626;
+  --map-line: #4d4d4d;
+  --chip-border: #666666;
+  --star-dim: #8a8a8a;
+  --pad: clamp(16px, 4vw, 64px);
+  --ease: cubic-bezier(0.65, 0, 0.35, 1);
+}
