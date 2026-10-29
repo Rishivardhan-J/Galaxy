@@ -107,6 +107,7 @@ test('star systems: selecting planets updates the dossier every time', async ({ 
     await expect(page.locator('.dossier .chip').first()).toBeVisible()
     await expect(page.locator('.dossier .actions')).toBeVisible()
     if (repo) await expect(page.getByRole('link', { name: /Repo/ })).toBeVisible()
+    await settle(page) // let the orbit finish rotating so the next click lands on a stationary planet
   }
 })
 

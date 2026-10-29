@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { motion } from 'motion/react'
 import { STOPS } from '../state/route'
 import { useStore } from '../state/store'
 import { profile } from '../content/profile'
@@ -32,7 +33,10 @@ export function TopBar() {
   const index = useStore((s) => s.index)
   const travel = useStore((s) => s.travel)
   const setOverlay = useStore((s) => s.setOverlay)
+  const reduced = useStore((s) => s.reducedMotion)
   const [open, setOpen] = useState(false)
+  const [hover, setHover] = useState<number | null>(null)
+  const spring = reduced ? { duration: 0 } : { type: 'spring' as const, stiffness: 520, damping: 42 }
   return (
     <header className="topbar">
       <a className="logo" href="#launchpad" onClick={(e) => { e.preventDefault(); travel(0) }} aria-label={`RJ, ${profile.name} home`}>
@@ -40,8 +44,18 @@ export function TopBar() {
       </a>
       <nav aria-label="Sections" id="site-nav" className={`nav ${open ? 'open' : ''}`}>
         {STOPS.map((s, i) => (
-          <button key={s.key} aria-current={i === index ? 'page' : undefined} onClick={() => { setOpen(false); travel(i) }}>
-            {s.label}
+          <button
+            key={s.key}
+            aria-current={i === index ? 'page' : undefined}
+            aria-keyshortcuts={String(i + 1)}
+            title={`${s.label} (${i + 1})`}
+            onClick={() => { setOpen(false); travel(i) }}
+            onPointerEnter={(e) => { if (e.pointerType === 'mouse' && !reduced) setHover(i) }}
+            onPointerLeave={() => setHover(null)}
+          >
+            {i === index && <motion.span layoutId="nav-ind" className="nav-ind" transition={spring} aria-hidden="true" />}
+            {hover === i && i !== index && <motion.span layoutId="nav-hover" className="nav-hover" transition={spring} aria-hidden="true" />}
+            <span className="nav-label">{s.label}</span>
           </button>
         ))}
       </nav>
