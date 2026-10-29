@@ -13,11 +13,11 @@ export const profile = {
 } as const
 
 export const timeline = [
-  { year: '2024–2028', title: 'B.E. Computer Science', detail: 'Sri Eshwar College of Engineering · CGPA 7.91 (IV sem)' },
-  { year: '2025', title: 'Aptitude Guru · Internship', detail: 'Feastly, a full-stack food delivery system with role-based access, secure auth, orders and payments (MERN).' },
-  { year: '2026', title: 'Algotutor · Flutter Internship', detail: 'CampusHub, a student assistant app for schedules, resources and announcements.' },
-  { year: '2026', title: 'Finalist · two hackathons', detail: 'Google Developer Groups TechSprint 2026 · HCL Foundations + StartUp TN AI for Social Impact Challenge 2026.' },
-  { year: 'Always', title: 'LeetCode', detail: 'Max rating 1649 · 600+ problems solved.' },
+  { year: '2024–2028', tag: 'Education', title: 'B.E. Computer Science', detail: 'Sri Eshwar College of Engineering.', chips: ['CGPA 7.91', 'IV sem'], now: true },
+  { year: '2025', tag: 'Internship', title: 'Aptitude Guru', detail: 'Feastly, a full-stack food delivery system with role-based access, secure auth, orders and payments.', chips: ['MongoDB', 'Express', 'React', 'Node.js'], now: false },
+  { year: '2026', tag: 'Internship', title: 'Algotutor · Flutter', detail: 'CampusHub, a student assistant app for schedules, resources and announcements.', chips: ['Flutter', 'Dart'], now: false },
+  { year: '2026', tag: 'Achievement', title: 'Finalist, twice', detail: 'Google Developer Groups TechSprint 2026, and HCL Foundations + StartUp TN AI for Social Impact Challenge 2026.', chips: ['GDG TechSprint', 'AI for Social Impact'], now: false },
+  { year: 'Always', tag: 'Practice', title: 'LeetCode', detail: 'Steady problem solving to sharpen data structures and algorithms.', chips: ['Max rating 1649', '600+ solved'], now: false },
 ]
 
 export const credentials = [

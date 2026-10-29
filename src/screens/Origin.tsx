@@ -17,12 +17,20 @@ export function Origin() {
             <SplitText text="The best way to learn is by building." />
           </h2>
         </div>
-        <div className="scroll-panel" style={{ maxHeight: '100%' }}>
-          <ol style={{ listStyle: 'none', margin: 0, padding: 0 }}>
+        <div className="scroll-panel origin-side">
+          <ol className="journey">
             {timeline.map((t) => (
-              <Item as="li" key={t.title} className="tl-row">
-                <span className="label" style={{ paddingTop: 4 }}>{t.year}</span>
-                <div><h3>{t.title}</h3><p>{t.detail}</p></div>
+              <Item as="li" key={t.title} className={`stop ${t.now ? 'now' : ''}`}>
+                <i className="node" aria-hidden="true" />
+                <div className="stop-head">
+                  <span className="label">{t.tag}{t.now && <b className="now-tag"> · In progress</b>}</span>
+                  <span className="stop-year">{t.year}</span>
+                </div>
+                <div className="stop-title">
+                  <h3>{t.title}</h3>
+                  <div className="chip-row">{t.chips.map((c) => <span className="chip" key={c}>{c}</span>)}</div>
+                </div>
+                <p>{t.detail}</p>
               </Item>
             ))}
           </ol>

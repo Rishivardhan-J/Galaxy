@@ -96,3 +96,42 @@ test('front gate: enter orbit warps to the Launchpad', async ({ page }) => {
   await expect(page).toHaveURL(/#launchpad$/)
   await expect(enter).toBeHidden()
 })
+
+test('star systems: selecting planets updates the dossier every time', async ({ page }) => {
+  await page.goto('/#star-systems')
+  const h = page.locator('.dossier h2')
+  await expect(h).toContainText('Crime Analytics')
+  for (const [name, title, repo] of [['Transit', 'Transit', false], ['HarvestPro', 'HarvestPro', false], ['Bench', 'Bench', true], ['Crime Analytics', 'Crime Analytics', true]] as const) {
+    await page.getByRole('radio', { name: new RegExp(name) }).click({ force: true })
+    await expect(h).toContainText(title)
+    await expect(page.locator('.dossier .chip').first()).toBeVisible()
+    await expect(page.locator('.dossier .actions')).toBeVisible()
+    if (repo) await expect(page.getByRole('link', { name: /Repo/ })).toBeVisible()
+  }
+})
+
+test('star systems: arrow keys rotate the orbit without leaving the stop; Enter opens the mission', async ({ page }) => {
+  await page.goto('/#star-systems')
+  await page.getByRole('radio', { name: /Crime Analytics/ }).focus()
+  await page.keyboard.press('ArrowRight')
+  await expect(page.locator('.dossier h2')).toContainText('Transit')
+  await expect(page).toHaveURL(/#star-systems$/)
+  await page.keyboard.press('ArrowLeft')
+  await page.keyboard.press('Enter')
+  await expect(page.getByRole('dialog', { name: /Crime Analytics.*case study/ })).toBeVisible()
+  await page.keyboard.press('Escape')
+  await expect(page.getByRole('dialog')).toBeHidden()
+})
+
+test('star systems: brief steps open the matching case-study page', async ({ page }) => {
+  await page.goto('/#star-systems')
+  await page.locator('.steps button', { hasText: 'architecture' }).click()
+  await expect(page).toHaveURL(/crime-analytics\/architecture$/)
+})
+
+test('constellations link lands on the right planet', async ({ page }) => {
+  await page.goto('/#constellations')
+  await page.getByRole('button', { name: /MongoDB/ }).click()
+  await page.locator('.skill-panel li button', { hasText: 'Bench' }).click()
+  await expect(page.locator('.dossier h2')).toContainText('Bench', { timeout: 5000 })
+})

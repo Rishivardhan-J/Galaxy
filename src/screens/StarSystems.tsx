@@ -1,74 +1,83 @@
 import { motion } from 'motion/react'
 import { Screen } from '../components/Motion'
-import { projects, type Project } from '../content/projects'
-import { Planet } from '../features/planet/Planet'
+import { CASE_PAGES, projects } from '../content/projects'
+import { groupStack } from '../content/stack'
+import { Orbit } from '../features/orbit/Orbit'
 import { useStore } from '../state/store'
 
-const sizeOf = (p: Project, sel: boolean, small: boolean) => {
-  const base = p.tier === 'flagship' ? 132 : 78
-  const k = small ? 0.62 : 1
-  return Math.round(base * k * (sel ? 1.3 : 1))
-}
+const firstSentence = (t: string) => t.split(/(?<=\.)\s/)[0]
 
 export function StarSystems() {
   const selected = useStore((s) => s.selected)
   const select = useStore((s) => s.select)
   const openCase = useStore((s) => s.openCase)
   const reduced = useStore((s) => s.reducedMotion)
-  const small = typeof window !== 'undefined' && (window.innerWidth < 768 || window.innerHeight < 700)
   const idx = Math.max(0, projects.findIndex((p) => p.slug === selected))
-  const ordered = [...projects.slice(idx), ...projects.slice(0, idx)] // selected anchors left
   const sel = projects[idx]
+  const step = (d: number) => select(projects[(idx + d + projects.length) % projects.length].slug)
 
   return (
     <Screen>
       <div className="systems">
-        <div className="orbit h-scroll" role="group" aria-label="Projects, planets along an orbit">
-          <div className="orbit-row">
-            {ordered.map((p) => {
-              const isSel = p.slug === selected
-              const size = sizeOf(p, isSel, small)
-              return (
-                <motion.button
-                  layout={!reduced}
-                  transition={{ duration: 0.5, ease: [0.65, 0, 0.35, 1] }}
-                  key={p.slug}
-                  className="planet-btn"
-                  style={{ width: size, height: size, marginRight: isSel && p.planet.ring ? Math.round(size * 0.45) : 0, marginLeft: isSel && p.planet.ring ? Math.round(size * 0.45) : 0 }}
-                  aria-pressed={isSel}
-                  aria-label={`${p.name}, ${p.tier} project`}
-                  onClick={() => select(p.slug)}
-                >
-                  <Planet params={p.planet} size={size} />
-                  {isSel && (
-                    <svg className="sel-ring" viewBox="0 0 100 100" aria-hidden="true" style={{ inset: -16 }}>
-                      <circle cx="50" cy="50" r="49" pathLength={1} />
-                    </svg>
-                  )}
-                  {!isSel && <span className="planet-name label">{p.short}</span>}
-                </motion.button>
-              )
-            })}
-          </div>
-        </div>
+        <Orbit />
         <motion.div
           key={sel.slug}
-          className="detail scroll-panel"
-          initial={reduced ? false : { opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5 }}
+          className="dossier scroll-panel"
+          initial={reduced ? false : { opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
         >
-          <div>
-            <p className="label">03 · Star systems · {sel.tier} · {sel.year}</p>
+          <div className="dos-id">
+            <div className="dos-top">
+              <p className="label">03 · Mission {String(idx + 1).padStart(2, '0')} · {sel.tier} · {sel.year}</p>
+              <div className="stepper" role="group" aria-label="Browse projects">
+                <button onClick={() => step(-1)} aria-label="Previous project">‹</button>
+                <span className="label" aria-live="polite">{String(idx + 1).padStart(2, '0')} / {String(projects.length).padStart(2, '0')}</span>
+                <button onClick={() => step(1)} aria-label="Next project">›</button>
+              </div>
+            </div>
             <h2 className="display" data-heading tabIndex={-1}>{sel.name}</h2>
             <p className="body">{sel.summary}</p>
           </div>
-          <div className="detail-side">
-            <div className="chip-row" aria-label="Tech stack">{sel.stack.map((t) => <span className="chip" key={t}>{t}</span>)}</div>
-            <div className="actions" style={{ marginTop: 20 }}>
+
+          <div className="dos-brief">
+            {sel.problem ? (
+              <>
+                <p className="label">The brief</p>
+                <blockquote>{firstSentence(sel.problem)}</blockquote>
+                <ol className="steps" aria-label="Case study pages">
+                  {CASE_PAGES.map((c, i) => (
+                    <li key={c}>
+                      <button onClick={() => openCase(sel.slug, i)}>
+                        <span className="label">{String(i + 1).padStart(2, '0')}</span>
+                        <span className="step-name">{c}</span>
+                        <span aria-hidden="true">→</span>
+                      </button>
+                    </li>
+                  ))}
+                </ol>
+              </>
+            ) : (
+              <>
+                <p className="label">Side mission</p>
+                <blockquote>{sel.summary}</blockquote>
+              </>
+            )}
+          </div>
+
+          <div className="dos-stack">
+            <div className="groups" aria-label="Tech stack">
+              {groupStack(sel.stack).map((g) => (
+                <div className="group" key={g.group}>
+                  <span className="label">{g.group}</span>
+                  <div className="chip-row">{g.items.map((t) => <span className="chip" key={t}>{t}</span>)}</div>
+                </div>
+              ))}
+            </div>
+            <div className="actions">
               {sel.problem && <button className="btn btn-primary" onClick={() => openCase(sel.slug)}>Open mission →</button>}
-              {sel.repoUrl && <a className="btn btn-secondary" href={sel.repoUrl} target="_blank" rel="noreferrer">Repo ↗</a>}
-              {sel.liveUrl && <a className="btn btn-secondary" href={sel.liveUrl} target="_blank" rel="noreferrer">Live demo ↗</a>}
+              {sel.repoUrl ? <a className="btn btn-secondary" href={sel.repoUrl} target="_blank" rel="noreferrer">Repo ↗</a> : <span className="btn btn-secondary" aria-disabled="true">Repo private</span>}
+              {sel.liveUrl ? <a className="btn btn-secondary" href={sel.liveUrl} target="_blank" rel="noreferrer">Live demo ↗</a> : <span className="btn btn-secondary" aria-disabled="true">Live demo soon</span>}
             </div>
           </div>
         </motion.div>

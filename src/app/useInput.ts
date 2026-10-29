@@ -36,6 +36,7 @@ export function useInput() {
         if (next >= 0 && next < total) { e.preventDefault(); s.openCase(s.caseStudy.slug, next) }
         return
       }
+      if (e.target instanceof HTMLElement && e.target.closest('[data-orbit]')) return // the orbit owns arrow keys while focused
       if (e.target instanceof HTMLElement && e.target.closest('.scroll-panel') && (e.key === 'ArrowUp' || e.key === 'ArrowDown')) return
       e.preventDefault()
       s.travel(s.index + (fwd ? 1 : -1))
