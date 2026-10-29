@@ -1,7 +1,8 @@
-import { lazy, Suspense, useCallback, useEffect, useState } from 'react'
+import { lazy, Suspense, useEffect, useState } from 'react'
 import { AnimatePresence } from 'motion/react'
 import { Starfield } from '../features/starfield/Starfield'
-import { BootSequence, Hud } from '../features/hud/Hud'
+import Gate from '../features/gate/Gate'
+import { Hud } from '../features/hud/Hud'
 import { BottomBar, ProgressLine, TopBar } from '../components/Bars'
 import { Launchpad } from '../screens/Launchpad'
 import { Origin } from '../screens/Origin'
@@ -19,8 +20,6 @@ const CommandPalette = lazy(() => import('../features/palette/CommandPalette'))
 const Cursor = lazy(() => import('../features/cursor/Cursor'))
 
 const SCREENS = [Launchpad, Origin, StarSystems, Constellations, Transmission]
-const BOOT_KEY = 'galaxy-booted'
-const seen = () => { try { return sessionStorage.getItem(BOOT_KEY) === '1' } catch { return true } }
 
 export default function App() {
   const index = useStore((s) => s.index)
@@ -31,13 +30,12 @@ export default function App() {
   const reduced = useStore((s) => s.reducedMotion)
   const sound = useStore((s) => s.sound)
   const announce = useStore((s) => s.announce)
-  const [booting, setBooting] = useState(() => !seen() && !matchMedia('(prefers-reduced-motion: reduce)').matches && !location.hash)
+  const phase = useStore((s) => s.phase)
+  const booting = phase !== 'site'
   const [fine] = useState(() => matchMedia('(pointer: fine)').matches)
 
   useInput()
   useInitState()
-
-  const doneBoot = useCallback(() => { setBooting(false); try { sessionStorage.setItem(BOOT_KEY, '1') } catch { /* private mode */ } }, [])
 
   // after each transition: title, focus the new heading, live-region announcement
   useEffect(() => {
@@ -51,6 +49,7 @@ export default function App() {
   useEffect(() => { document.documentElement.classList.toggle('rm', reduced) }, [reduced])
   useEffect(() => { if (sound) startHum(); else stopHum() }, [sound])
   useEffect(() => { if (sound && status === 'transitioning') whoosh(direction) }, [sound, status, direction])
+  useEffect(() => { if (sound && phase === 'warp') whoosh(1) }, [sound, phase])
 
   const Current = SCREENS[index]
   return (
@@ -58,19 +57,21 @@ export default function App() {
       <a className="skip" href="#main">Skip to content</a>
       <Starfield />
       <div className="vignette" aria-hidden="true" />
-      {booting && <BootSequence onDone={doneBoot} />}
-      <div className="app">
+      {booting && <Gate />}
+      {!booting && (
+      <div className="app intro">
         <TopBar />
         <Hud />
         <main className="stage" id="main" aria-label="Portfolio" inert={!!(overlay || caseStudy) || undefined}>
           <p className="sr-only">Background: animated white stars drift in space and streak outward when you travel between sections.</p>
           <AnimatePresence mode="wait" custom={direction}>
-            {!booting && <Current key={index} />}
+            <Current key={index} />
           </AnimatePresence>
         </main>
         <BottomBar />
       </div>
-      <ProgressLine />
+      )}
+      {!booting && <ProgressLine />}
       <Suspense fallback={null}>
         <AnimatePresence>{caseStudy && <CaseStudyLayer key="cs" cs={caseStudy} />}</AnimatePresence>
         <AnimatePresence>{overlay === 'brief' && <BriefOverlay key="brief" />}</AnimatePresence>

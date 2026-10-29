@@ -5,8 +5,25 @@ export const TRANSITION_MS = 260
 export const REDUCED_MS = 120
 
 type Overlay = null | 'brief' | 'palette'
+type Phase = 'gate' | 'warp' | 'site'
+
+export const WARP_MS = 2600 // whole entry animation (starfield keeps running after the site mounts)
+const WARP_SWAP_MS = 1900 // moment the flash peaks and the Launchpad takes over
+
+// A fresh visit to the bare URL starts at the gate; deep links and test runs skip it.
+const initialPhase = (): Phase => {
+  try {
+    if (typeof location === 'undefined' || location.hash || sessionStorage.getItem('galaxy-booted') === '1') return 'site'
+  } catch {
+    /* storage blocked: fall through to the gate */
+  }
+  return 'gate'
+}
 
 interface State {
+  phase: Phase
+  enterAt: number
+  enter: () => void
   index: number
   direction: 1 | -1
   status: 'idle' | 'transitioning'
@@ -40,6 +57,18 @@ const setHash = (r: Route) => {
 }
 
 export const useStore = create<State>((set, get) => ({
+  phase: initialPhase(),
+  enterAt: -1e9,
+  enter: () => {
+    if (get().phase !== 'gate') return
+    const finish = () => {
+      set({ phase: 'site' })
+      if (typeof location !== 'undefined' && !location.hash) location.hash = '#launchpad'
+    }
+    if (get().reducedMotion) return finish()
+    set({ phase: 'warp', enterAt: performance.now() })
+    setTimeout(finish, WARP_SWAP_MS)
+  },
   index: 0,
   direction: 1,
   status: 'idle',

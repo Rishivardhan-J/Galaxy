@@ -226,3 +226,67 @@ h1, h2, h3, p { margin: 0; }
   .pulse { animation: none; }
 }
 html.rm .split > span, html.rm .sel-ring circle, html.rm .diagram .edge, html.rm .diagram .node { animation: none !important; opacity: 1; stroke-dashoffset: 0; transform: none; }
+
+/* ---------- gate (front page) ---------- */
+.gate { position: fixed; inset: 0; z-index: 10; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); line-height: 1.7; }
+.gate.leaving { pointer-events: none; animation: gateOut 700ms cubic-bezier(0.55, 0, 0.9, 0.45) forwards; }
+@keyframes gateOut { 0% { opacity: 1; transform: scale(1); } 100% { opacity: 0; transform: scale(2.4); } }
+.g-grid { position: absolute; inset: 0; background-image: linear-gradient(var(--line-soft) 1px, transparent 1px), linear-gradient(90deg, var(--line-soft) 1px, transparent 1px); background-size: 64px 64px; opacity: 0.28; mask-image: radial-gradient(ellipse at center, #000 10%, transparent 72%); }
+.g-hline, .g-vline { position: absolute; background: var(--line); opacity: 0.8; }
+.g-hline { left: 0; right: 0; top: 50%; height: 1px; mask-image: linear-gradient(90deg, transparent, #000 18%, #000 82%, transparent); }
+.g-vline { top: 0; bottom: 0; left: 50%; width: 1px; mask-image: linear-gradient(transparent, #000 18%, #000 82%, transparent); }
+.g-ring { position: absolute; left: 50%; top: 50%; width: min(78vh, 88vw); aspect-ratio: 1; transform: translate(-50%, -50%); border: 1px solid var(--line); border-radius: 50%; animation: ringIn 1.4s var(--ease) both; }
+.g-ring i { position: absolute; inset: 0; border-radius: 50%; animation: spin 18s linear infinite; }
+.g-ring i::after { content: ''; position: absolute; left: 50%; top: -3px; width: 6px; height: 6px; margin-left: -3px; border-radius: 50%; background: var(--fg); box-shadow: 0 0 12px 2px rgba(255, 255, 255, 0.6); }
+.g-ring2 { width: min(98vh, 108vw); border: 1px dashed var(--line-soft); animation: ringIn 1.8s var(--ease) both, spin 120s linear infinite reverse; }
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes ringIn { from { opacity: 0; scale: 0.8; } to { opacity: 1; scale: 1; } }
+.g-ring2 { animation-name: ringIn, spin2; }
+@keyframes spin2 { to { rotate: -360deg; } }
+.g-plus { position: absolute; font-size: 22px; line-height: 1; color: var(--fg); opacity: 0.85; }
+.g-top { left: 50%; top: clamp(24px, 6vh, 64px); transform: translateX(-50%); }
+.g-bottom { left: 50%; bottom: clamp(24px, 6vh, 64px); transform: translateX(-50%); }
+.g-left { left: clamp(16px, 2vw, 32px); top: 50%; transform: translateY(-50%); }
+.g-right { right: clamp(16px, 3vw, 48px); top: 50%; transform: translateY(-50%); }
+.g-boxed { border: 1px solid var(--chip-border); width: 38px; height: 38px; display: grid; place-items: center; }
+.g-corner { position: absolute; animation: fadein 900ms 400ms both; }
+.g-corner b { display: block; width: 18px; height: 1px; background: var(--fg); margin-bottom: 10px; }
+.g-tl { left: clamp(20px, 3.4vw, 52px); top: clamp(20px, 4vh, 52px); }
+.g-tr { right: clamp(20px, 3.4vw, 52px); top: clamp(20px, 4vh, 52px); text-align: left; }
+.g-ml { left: clamp(20px, 3.4vw, 52px); top: 50%; margin-top: 56px; }
+.g-bl { left: clamp(20px, 3.4vw, 52px); bottom: clamp(20px, 4vh, 52px); display: flex; align-items: center; gap: 10px; }
+.g-bl b { position: absolute; top: -14px; margin: 0; }
+.g-br { right: clamp(20px, 3.4vw, 52px); bottom: clamp(20px, 4vh, 52px); }
+.g-center { position: absolute; inset: 0; display: grid; place-content: center; justify-items: center; gap: 18px; text-align: center; padding: 0 16px; }
+.g-title { margin: 0; font-family: var(--font-display); font-weight: 500; font-size: clamp(34px, 5.4vw, 72px); letter-spacing: -0.02em; line-height: 1.1; text-transform: none; min-height: 1.1em; white-space: nowrap; }
+.g-hello { color: var(--muted); }
+.g-name { color: var(--fg); font-weight: 700; }
+.g-caret { display: inline-block; width: 2px; height: 0.9em; margin-left: 6px; background: var(--fg); vertical-align: -0.1em; animation: blink 1s steps(1) infinite; }
+@keyframes blink { 50% { opacity: 0; } }
+.g-sub { margin: 0; font-size: 12px; letter-spacing: 0.3em; animation: fadein 900ms 900ms both; }
+.g-btn { position: relative; margin-top: 18px; padding: 17px 38px; border: 1px solid var(--chip-border); background: rgba(255, 255, 255, 0.04); color: var(--fg); font: 500 13px var(--font-mono); letter-spacing: 0.22em; text-transform: uppercase; display: inline-flex; gap: 12px; animation: fadein 900ms 1300ms both; transition: background 0.25s, letter-spacing 0.25s, box-shadow 0.25s; }
+.g-btn:hover, .g-btn:focus-visible { background: rgba(255, 255, 255, 0.12); letter-spacing: 0.28em; box-shadow: 0 0 40px rgba(255, 255, 255, 0.18); }
+.g-btn .c { position: absolute; width: 12px; height: 12px; border: 0 solid var(--fg); transition: transform 0.25s var(--ease); }
+.c1 { left: -7px; top: -7px; border-left-width: 1px; border-top-width: 1px; }
+.c2 { right: -7px; top: -7px; border-right-width: 1px; border-top-width: 1px; }
+.c3 { left: -7px; bottom: -7px; border-left-width: 1px; border-bottom-width: 1px; }
+.c4 { right: -7px; bottom: -7px; border-right-width: 1px; border-bottom-width: 1px; }
+.g-btn:hover .c1, .g-btn:focus-visible .c1 { transform: translate(-4px, -4px); }
+.g-btn:hover .c2, .g-btn:focus-visible .c2 { transform: translate(4px, -4px); }
+.g-btn:hover .c3, .g-btn:focus-visible .c3 { transform: translate(-4px, 4px); }
+.g-btn:hover .c4, .g-btn:focus-visible .c4 { transform: translate(4px, 4px); }
+.g-btn:focus-visible { outline: none; }
+.app.intro { animation: appIn 900ms 150ms cubic-bezier(0.22, 1, 0.36, 1) both; }
+@keyframes appIn { from { opacity: 0; transform: scale(1.04); } to { opacity: 1; transform: none; } }
+@media (max-width: 767px) {
+  .g-tr, .g-ml, .g-right, .g-left { display: none; }
+  .g-br { font-size: 9.5px; }
+  .g-title { font-size: clamp(26px, 8.4vw, 40px); }
+  .g-sub { font-size: 10px; letter-spacing: 0.2em; }
+}
+@media (prefers-reduced-motion: reduce) { .g-ring, .g-ring i, .g-ring2, .g-corner, .g-sub, .g-btn, .g-caret, .app.intro { animation: none !important; } }
+html.rm .g-ring, html.rm .g-ring i, html.rm .g-ring2, html.rm .g-corner, html.rm .g-sub, html.rm .g-btn, html.rm .app.intro { animation: none !important; }
+
+.g-type { position: relative; display: inline-block; }
+.g-ghost { visibility: hidden; font-weight: 700; }
+.g-live { position: absolute; left: 0; top: 0; white-space: nowrap; }

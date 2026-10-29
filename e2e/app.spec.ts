@@ -83,3 +83,16 @@ test('Esc from a case study returns to Star Systems, not a blank page', async ({
   await expect(page.getByRole('button', { name: /Open mission/ })).toBeVisible()
   expect(errors).toEqual([])
 })
+
+test('front gate: enter orbit warps to the Launchpad', async ({ page }) => {
+  await page.addInitScript(() => sessionStorage.removeItem('galaxy-booted'))
+  await page.goto('/')
+  const enter = page.getByRole('button', { name: /Enter orbit/ })
+  await expect(enter).toBeVisible()
+  const res = await new AxeBuilder({ page }).analyze()
+  expect(res.violations.map((v) => `${v.id}: ${v.nodes[0].target}`)).toEqual([])
+  await enter.click()
+  await expect(page.locator('h1[data-heading]')).toContainText('Rishivardhan J', { timeout: 8000 })
+  await expect(page).toHaveURL(/#launchpad$/)
+  await expect(enter).toBeHidden()
+})

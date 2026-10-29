@@ -12,6 +12,7 @@ export function useInput() {
 
     const onKey = (e: KeyboardEvent) => {
       const s = useStore.getState()
+      if (s.phase !== 'site') return
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); s.setOverlay(s.overlay === 'palette' ? null : 'palette'); return }
       if (e.metaKey || e.ctrlKey || e.altKey || typing(e.target)) return
       if (s.overlay === 'palette') return
@@ -42,6 +43,7 @@ export function useInput() {
 
     const onWheel = (e: WheelEvent) => {
       const s = useStore.getState()
+      if (s.phase !== 'site') return
       if (!s.wheelTravel || s.overlay || s.caseStudy || !matchMedia('(pointer: fine)').matches) return
       if ((e.target as HTMLElement).closest?.('.scroll-panel')) return
       const now = performance.now()
@@ -54,7 +56,7 @@ export function useInput() {
     const onStart = (e: TouchEvent) => { sx = e.touches[0].clientX; sy = e.touches[0].clientY }
     const onEnd = (e: TouchEvent) => {
       const s = useStore.getState()
-      if (s.overlay) return
+      if (s.overlay || s.phase !== 'site') return
       const dx = e.changedTouches[0].clientX - sx, dy = e.changedTouches[0].clientY - sy
       const horiz = Math.abs(dx) > Math.abs(dy)
       if (Math.max(Math.abs(dx), Math.abs(dy)) < 60) return

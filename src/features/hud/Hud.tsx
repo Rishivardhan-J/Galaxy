@@ -19,20 +19,3 @@ export function Hud() {
     </div>
   )
 }
-
-export function BootSequence({ onDone }: { onDone: () => void }) {
-  useEffect(() => {
-    const t = setTimeout(onDone, 1100)
-    const skip = () => onDone()
-    window.addEventListener('keydown', skip); window.addEventListener('pointerdown', skip)
-    return () => { clearTimeout(t); window.removeEventListener('keydown', skip); window.removeEventListener('pointerdown', skip) }
-  }, [onDone])
-  const lines = ['Galaxy · systems check', 'Starfield · online', 'Course · launchpad']
-  return (
-    <div className="boot" aria-hidden="true">
-      <div style={{ display: 'grid', gap: 8 }}>
-        {lines.map((l, i) => <div key={l} style={{ ['--i' as string]: i }}>› {l}</div>)}
-      </div>
-    </div>
-  )
-}
