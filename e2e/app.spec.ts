@@ -112,6 +112,8 @@ test('star systems: selecting planets updates the dossier every time', async ({ 
 
 test('star systems: arrow keys rotate the orbit without leaving the stop; Enter opens the mission', async ({ page }) => {
   await page.goto('/#star-systems')
+  // the app moves focus to the heading once the entry transition ends; focusing the orbit earlier gets overridden
+  await expect(page.locator('h2[data-heading]')).toBeFocused()
   await page.getByRole('radio', { name: /Crime Analytics/ }).focus()
   await page.keyboard.press('ArrowRight')
   await expect(page.locator('.dossier h2')).toContainText('Transit')
