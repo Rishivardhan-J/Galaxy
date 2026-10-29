@@ -132,6 +132,6 @@ test('star systems: brief steps open the matching case-study page', async ({ pag
 test('constellations link lands on the right planet', async ({ page }) => {
   await page.goto('/#constellations')
   await page.getByRole('button', { name: /MongoDB/ }).click()
-  await page.locator('.skill-panel li button', { hasText: 'Bench' }).click()
+  await page.locator('.proj-list li button', { hasText: 'Bench' }).click()
   await expect(page.locator('.dossier h2')).toContainText('Bench', { timeout: 5000 })
 })
