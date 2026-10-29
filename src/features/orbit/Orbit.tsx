@@ -81,11 +81,13 @@ export function Orbit() {
 
   const onKey = (e: KeyboardEvent) => {
     const k = e.key
-    if (k === 'ArrowRight' || k === 'ArrowDown') go(idx + 1)
-    else if (k === 'ArrowLeft' || k === 'ArrowUp') go(idx - 1)
+    // read the live selection: a fast key press can land before React re-renders with the previous one
+    const cur = Math.max(0, projects.findIndex((p) => p.slug === useStore.getState().selected))
+    if (k === 'ArrowRight' || k === 'ArrowDown') go(cur + 1)
+    else if (k === 'ArrowLeft' || k === 'ArrowUp') go(cur - 1)
     else if (k === 'Home') go(0)
     else if (k === 'End') go(projects.length - 1)
-    else if (k === 'Enter' && projects[idx].problem) openCase(projects[idx].slug)
+    else if (k === 'Enter' && projects[cur].problem) openCase(projects[cur].slug)
     else return
     e.preventDefault()
   }
