@@ -29,3 +29,11 @@ export const skillSchema = z.object({
   y: z.number().min(0).max(560),
 })
 export type Skill = z.infer<typeof skillSchema>
+
+export const credentialSchema = z.object({
+  issuer: z.string(),
+  mark: z.string().max(4),
+  track: z.boolean().optional(),
+  courses: z.array(z.object({ name: z.string(), year: z.number() })).min(1),
+})
+export type Credential = z.infer<typeof credentialSchema>

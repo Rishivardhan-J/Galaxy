@@ -1,4 +1,6 @@
 import { describe, expect, it } from 'vitest'
+import { credentialSchema } from './schema'
+import { credentials } from './profile'
 import { flagships, projects } from './projects'
 import { links, skills } from './skills'
 import { stackGroup } from './stack'
@@ -17,5 +19,9 @@ describe('content', () => {
   })
   it('every stack item has a display group', () => {
     for (const p of projects) for (const t of p.stack) expect(stackGroup[t], t).toBeDefined()
+  })
+  it('credentials are valid and cover five courses', () => {
+    for (const c of credentials) credentialSchema.parse(c)
+    expect(credentials.flatMap((c) => c.courses)).toHaveLength(5)
   })
 })

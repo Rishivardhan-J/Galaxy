@@ -1,5 +1,5 @@
 import { motion, type Variants } from 'motion/react'
-import type { ReactNode } from 'react'
+import type { PointerEvent, ReactNode } from 'react'
 import { useStore } from '../state/store'
 
 const easeOut = [0.22, 1, 0.36, 1] as const
@@ -33,8 +33,8 @@ export function Screen({ children, className = '' }: { children: ReactNode; clas
 const itemV: Variants = { hidden: { opacity: 0, y: 8 }, show: { opacity: 1, y: 0, transition: { duration: 0.2, ease: easeOut } } }
 const itemR: Variants = { hidden: { opacity: 0 }, show: { opacity: 1 } }
 
-export function Item({ children, className, as = 'div' }: { children: ReactNode; className?: string; as?: 'div' | 'li' }) {
+export function Item({ children, className, as = 'div', onPointerMove }: { children: ReactNode; className?: string; as?: 'div' | 'li'; onPointerMove?: (e: PointerEvent<HTMLElement>) => void }) {
   const reduced = useStore((s) => s.reducedMotion)
   const C = as === 'li' ? motion.li : motion.div
-  return <C className={className} variants={reduced ? itemR : itemV}>{children}</C>
+  return <C className={className} onPointerMove={onPointerMove} variants={reduced ? itemR : itemV}>{children}</C>
 }

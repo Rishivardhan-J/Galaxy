@@ -21,11 +21,9 @@ export const timeline = [
 ]
 
 export const credentials = [
-  { name: 'Intro to C programming', by: 'IIT Bombay', mark: 'IITB', year: 2024 },
-  { name: 'Intro to C++ programming', by: 'IIT Bombay', mark: 'IITB', year: 2024 },
-  { name: 'Mastering DSA in C and C++', by: 'Udemy', mark: 'UD', year: 2025 },
-  { name: 'SQL Basics', by: 'HackerRank', mark: 'HR', year: 2025 },
-  { name: 'SQL Intermediate', by: 'HackerRank', mark: 'HR', year: 2025 },
+  { issuer: 'IIT Bombay', mark: 'IITB', courses: [{ name: 'Intro to C programming', year: 2024 }, { name: 'Intro to C++ programming', year: 2024 }] },
+  { issuer: 'Udemy', mark: 'UD', courses: [{ name: 'Mastering DSA in C and C++', year: 2025 }] },
+  { issuer: 'HackerRank', mark: 'HR', track: true, courses: [{ name: 'SQL Basics', year: 2025 }, { name: 'SQL Intermediate', year: 2025 }] },
 ]
 
 export const roleCycle = ['Full-stack & mobile developer', 'Flutter · React · Node.js'] as const
